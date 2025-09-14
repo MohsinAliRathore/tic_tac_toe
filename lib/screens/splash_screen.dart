@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac_toe/Constants/app_images.dart';
 import 'dart:async';
 import 'menu_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,12 +25,47 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          'Tic Tac Toe',
-          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-        ),
+    return Scaffold(
+      body: Stack(
+        children: [
+
+          SvgPicture.asset(
+            AppImages.background,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 100,
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 50),
+                alignment: Alignment.center,
+                child: SvgPicture.asset(
+                  AppImages.appLogo,
+                  fit: BoxFit.cover,
+                  width: 90,
+                  height: 100,
+                ),
+              ),
+              Container(
+                height: 100,
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 50),
+                alignment: Alignment.center,
+                child: SvgPicture.asset(
+                  AppImages.ticTacToeText,
+                  fit: BoxFit.cover,
+                  //width: double.infinity,
+                  //height: double.infinity,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

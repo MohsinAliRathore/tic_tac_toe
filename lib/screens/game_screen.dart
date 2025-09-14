@@ -5,7 +5,9 @@ import '../bloc/game_event.dart';
 import '../bloc/game_state.dart';
 import '../models/game_stats_model.dart';
 import '../widgets/line_painter.dart';
+import '../widgets/player_widget.dart';
 import 'menu_screen.dart';
+
 
 class GameScreen extends StatelessWidget {
   final bool isAI;
@@ -122,20 +124,11 @@ class GameScreen extends StatelessWidget {
                               ],
                             ),
                             child: Center(
-                              child: Text(
-                                state.board[row][col] == Player.x
-                                    ? 'X'
-                                    : state.board[row][col] == Player.o
-                                    ? 'O'
-                                    : '',
-                                style: TextStyle(
-                                  fontSize: 60,
-                                  fontWeight: FontWeight.bold,
-                                  color: state.board[row][col] == Player.x
-                                      ? Colors.blue[800]
-                                      : Colors.orange[800],
-                                ),
-                              ),
+                              child: state.board[row][col] == Player.x
+                                  ? XWidget(isTapped: isTapped)
+                                  : state.board[row][col] == Player.o
+                                  ? OWidget(isTapped: isTapped)
+                                  : const SizedBox.shrink(),
                             ),
                           ),
                         );
