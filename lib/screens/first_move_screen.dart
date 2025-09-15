@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:tic_tac_toe/widgets/custom_app_bar.dart';
+import '../Constants/app_images.dart';
+import '../Theme/app_colors.dart';
 import '../Utils/settings_manager.dart';
 import '../bloc/game_bloc.dart';
 import '../bloc/game_state.dart';
@@ -30,6 +35,8 @@ class FirstMoveSelection extends StatelessWidget {
                         isAI: isAI,
                         difficulty: difficulty,
                         firstMove: Player.x,
+                        userSymbol: Player.x,
+                        firstPlayer: isAI ? 'User' : 'Player 1',
                       ),
                     ),
                   ),
@@ -49,6 +56,8 @@ class FirstMoveSelection extends StatelessWidget {
                         isAI: isAI,
                         difficulty: difficulty,
                         firstMove: Player.o,
+                        userSymbol: Player.o,
+                        firstPlayer: isAI ? 'User' : 'Player 1',
                       ),
                     ),
                   ),

@@ -8,10 +8,6 @@ class SettingsManager {
   static Future<Difficulty> getDifficulty() async {
     final prefs = await SharedPreferences.getInstance();
     final difficultyString = prefs.getString(_difficultyKey);
-    if (difficultyString == null) {
-      await prefs.setString(_difficultyKey, 'easy');
-      return Difficulty.easy;
-    }
     switch (difficultyString) {
       case 'medium':
         return Difficulty.medium;

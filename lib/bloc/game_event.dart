@@ -16,5 +16,13 @@ class StartGameEvent extends TicTacToeEvent {
   final bool isAI;
   final Difficulty? difficulty;
   final Player firstMove;
-  StartGameEvent(this.isAI, this.difficulty, this.firstMove);
+  final Player userSymbol;
+  final String firstPlayer;
+  StartGameEvent({
+    required this.isAI,
+    this.difficulty,
+    required this.firstMove,
+    required this.userSymbol,
+    required this.firstPlayer,
+  });
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tic_tac_toe/screens/symbol_selection.dart';
+import '../Utils/settings_manager.dart';
 import '../bloc/game_bloc.dart';
 import '../bloc/game_state.dart';
-import 'game_screen.dart';
+import 'menu_screen.dart';
 
 class DifficultySelection extends StatelessWidget {
   const DifficultySelection({super.key});
@@ -17,51 +19,33 @@ class DifficultySelection extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
+                SettingsManager.setDifficulty(Difficulty.easy);
+                Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => TicTacToeBloc(),
-                      child: GameScreen(
-                        isAI: true,
-                        difficulty: Difficulty.easy,
-                      ),
-                    ),
-                  ),
+                  MaterialPageRoute(builder: (context) => const MainMenu()),
+                      (route) => false,
                 );
               },
               child: const Text('Easy'),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
+                SettingsManager.setDifficulty(Difficulty.medium);
+                Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => TicTacToeBloc(),
-                      child: GameScreen(
-                        isAI: true,
-                        difficulty: Difficulty.medium,
-                      ),
-                    ),
-                  ),
+                  MaterialPageRoute(builder: (context) => const MainMenu()),
+                      (route) => false,
                 );
               },
               child: const Text('Medium'),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
+                SettingsManager.setDifficulty(Difficulty.hard);
+                Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => TicTacToeBloc(),
-                      child: GameScreen(
-                        isAI: true,
-                        difficulty: Difficulty.hard,
-                      ),
-                    ),
-                  ),
+                  MaterialPageRoute(builder: (context) => const MainMenu()),
+                      (route) => false,
                 );
               },
               child: const Text('Hard'),

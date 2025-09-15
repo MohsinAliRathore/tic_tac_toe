@@ -13,18 +13,28 @@ class GameScreen extends StatelessWidget {
   final bool isAI;
   final Difficulty? difficulty;
   final Player firstMove;
+  final Player userSymbol;
+  final String firstPlayer;
 
   const GameScreen({
     super.key,
     required this.isAI,
     this.difficulty,
-    this.firstMove = Player.x,
+    required this.firstMove,
+    required this.userSymbol,
+    required this.firstPlayer,
   });
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TicTacToeBloc>().add(StartGameEvent(isAI, difficulty, firstMove));
+      context.read<TicTacToeBloc>().add(StartGameEvent(
+        isAI: isAI,
+        difficulty: difficulty,
+        firstMove: firstMove,
+        userSymbol: userSymbol,
+        firstPlayer: firstPlayer,
+      ));
     });
 
     return Scaffold(
@@ -46,6 +56,20 @@ class GameScreen extends StatelessWidget {
       ),
       body: BlocBuilder<TicTacToeBloc, TicTacToeState>(
         builder: (context, state) {
+          String winMessage;
+          if (state.winner != Player.none) {
+            if (state.isAI) {
+              winMessage = state.winner == state.userSymbol ? 'User Wins!' : 'AI Wins!';
+            } else {
+              winMessage = state.firstPlayer == 'Player 1' && state.winner == state.firstMove ||
+                  state.firstPlayer == 'Player 2' && state.winner != state.firstMove
+                  ? 'Player 1 Wins!'
+                  : 'Player 2 Wins!';
+            }
+          } else {
+            winMessage = 'It\'s a Draw!';
+          }
+
           return Column(
             children: [
               Padding(
@@ -54,11 +78,11 @@ class GameScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      'X Wins: ${GameStats.xWins}',
+                      state.isAI ? 'User: ${GameStats.userWins}' : 'Player 1: ${GameStats.player1Wins}',
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue),
                     ),
                     Text(
-                      'O Wins: ${GameStats.oWins}',
+                      state.isAI ? 'AI: ${GameStats.aiWins}' : 'Player 2: ${GameStats.player2Wins}',
                       style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.orange),
                     ),
                     Text(
@@ -104,7 +128,7 @@ class GameScreen extends StatelessWidget {
                         bool isTapped = state.board[row][col] != Player.none;
                         return GestureDetector(
                           onTap: () {
-                            if (state.isAI && state.currentPlayer == Player.o) return;
+                            if (state.isAI && state.currentPlayer != state.userSymbol) return;
                             context.read<TicTacToeBloc>().add(MakeMoveEvent(row, col));
                           },
                           child: AnimatedContainer(
@@ -144,9 +168,7 @@ class GameScreen extends StatelessWidget {
                   children: [
                     const SizedBox(height: 20),
                     Text(
-                      state.winner != Player.none
-                          ? '${state.winner == Player.x ? 'X' : 'O'} Wins!'
-                          : 'It\'s a Draw!',
+                      winMessage,
                       style: const TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,

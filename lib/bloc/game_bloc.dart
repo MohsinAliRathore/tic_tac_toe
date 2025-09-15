@@ -10,6 +10,9 @@ class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
     board: List.generate(3, (_) => List.generate(3, (_) => Player.none)),
     currentPlayer: Player.x,
     isAI: false,
+    userSymbol: Player.x,
+    firstPlayer: 'Player 1',
+    firstMove: Player.x,
   )) {
     on<StartGameEvent>(_onStartGame);
     on<MakeMoveEvent>(_onMakeMove);
@@ -22,9 +25,12 @@ class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
       currentPlayer: event.firstMove,
       isAI: event.isAI,
       difficulty: event.difficulty,
+      userSymbol: event.userSymbol,
+      firstPlayer: event.firstPlayer,
+      firstMove: event.firstMove,
     );
     emit(newState);
-    if (event.isAI && event.firstMove == Player.o) {
+    if (event.isAI && event.firstMove != event.userSymbol) {
       _makeAIMove(emit);
     }
   }
@@ -32,12 +38,15 @@ class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
   void _onResetBoard(ResetBoardEvent event, Emitter<TicTacToeState> emit) {
     final newState = TicTacToeState(
       board: List.generate(3, (_) => List.generate(3, (_) => Player.none)),
-      currentPlayer: state.currentPlayer,
+      currentPlayer: state.firstMove,
       isAI: state.isAI,
       difficulty: state.difficulty,
+      userSymbol: state.userSymbol,
+      firstPlayer: state.firstPlayer,
+      firstMove: state.firstMove,
     );
     emit(newState);
-    if (state.isAI && newState.currentPlayer == Player.o) {
+    if (state.isAI && newState.currentPlayer != state.userSymbol) {
       _makeAIMove(emit);
     }
   }
@@ -55,10 +64,21 @@ class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
     }
 
     bool gameOver = winner != Player.none || _isBoardFullTemp(newBoard);
-    if (winner == Player.x) {
-      GameStats.xWins++;
-    } else if (winner == Player.o) {
-      GameStats.oWins++;
+    if (winner != Player.none) {
+      if (state.isAI) {
+        if (winner == state.userSymbol) {
+          GameStats.userWins++;
+        } else {
+          GameStats.aiWins++;
+        }
+      } else {
+        if (state.firstPlayer == 'Player 1' && winner == state.firstMove ||
+            state.firstPlayer == 'Player 2' && winner != state.firstMove) {
+          GameStats.player1Wins++;
+        } else {
+          GameStats.player2Wins++;
+        }
+      }
     } else if (gameOver) {
       GameStats.draws++;
     }
@@ -73,8 +93,8 @@ class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
     if (!gameOver) {
       final nextPlayer = state.currentPlayer == Player.x ? Player.o : Player.x;
       emit(state.copyWith(currentPlayer: nextPlayer));
-      if (state.isAI && nextPlayer == Player.o) {
-        await Future.delayed(const Duration(milliseconds: 500));
+      if (state.isAI && nextPlayer != state.userSymbol) {
+        await Future.delayed(const Duration(seconds: 2));
         _makeAIMove(emit);
       }
     }
@@ -92,8 +112,8 @@ class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
       for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
           if (state.board[i][j] == Player.none) {
-            state.board[i][j] = Player.o;
-            if (_checkWinnerTemp(state.board) == Player.o) {
+            state.board[i][j] = state.userSymbol == Player.x ? Player.o : Player.x;
+            if (_checkWinnerTemp(state.board) == (state.userSymbol == Player.x ? Player.o : Player.x)) {
               state.board[i][j] = Player.none;
               return [i, j];
             }
@@ -104,8 +124,8 @@ class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
       for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
           if (state.board[i][j] == Player.none) {
-            state.board[i][j] = Player.x;
-            if (_checkWinnerTemp(state.board) == Player.x) {
+            state.board[i][j] = state.userSymbol;
+            if (_checkWinnerTemp(state.board) == state.userSymbol) {
               state.board[i][j] = Player.none;
               return [i, j];
             }
@@ -134,11 +154,12 @@ class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
   List<int> _findBestMove() {
     int bestVal = -1000;
     List<int> bestMove = [-1, -1];
+    Player aiSymbol = state.userSymbol == Player.x ? Player.o : Player.x;
 
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 3; j++) {
         if (state.board[i][j] == Player.none) {
-          state.board[i][j] = Player.o;
+          state.board[i][j] = aiSymbol;
           int moveVal = _minimax(0, false);
           state.board[i][j] = Player.none;
           if (moveVal > bestVal) {
@@ -157,12 +178,13 @@ class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
     if (score == -10) return score + depth;
     if (_isBoardFullTemp(state.board)) return 0;
 
+    Player aiSymbol = state.userSymbol == Player.x ? Player.o : Player.x;
     if (isMax) {
       int best = -1000;
       for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
           if (state.board[i][j] == Player.none) {
-            state.board[i][j] = Player.o;
+            state.board[i][j] = aiSymbol;
             best = max(best, _minimax(depth + 1, !isMax));
             state.board[i][j] = Player.none;
           }
@@ -174,7 +196,7 @@ class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
       for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
           if (state.board[i][j] == Player.none) {
-            state.board[i][j] = Player.x;
+            state.board[i][j] = state.userSymbol;
             best = min(best, _minimax(depth + 1, !isMax));
             state.board[i][j] = Player.none;
           }
@@ -186,8 +208,8 @@ class TicTacToeBloc extends Bloc<TicTacToeEvent, TicTacToeState> {
 
   int _evaluate() {
     Player tempWinner = _checkWinnerTemp(state.board);
-    if (tempWinner == Player.o) return 10;
-    if (tempWinner == Player.x) return -10;
+    if (tempWinner == (state.userSymbol == Player.x ? Player.o : Player.x)) return 10;
+    if (tempWinner == state.userSymbol) return -10;
     return 0;
   }
 

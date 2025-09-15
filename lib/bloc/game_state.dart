@@ -9,6 +9,9 @@ class TicTacToeState {
   final bool gameOver;
   final bool isAI;
   final Difficulty? difficulty;
+  final Player userSymbol;
+  final String firstPlayer;
+  final Player firstMove;
 
   TicTacToeState({
     required this.board,
@@ -18,6 +21,9 @@ class TicTacToeState {
     this.gameOver = false,
     required this.isAI,
     this.difficulty,
+    required this.userSymbol,
+    required this.firstPlayer,
+    required this.firstMove,
   });
 
   TicTacToeState copyWith({
@@ -28,6 +34,9 @@ class TicTacToeState {
     bool? gameOver,
     bool? isAI,
     Difficulty? difficulty,
+    Player? userSymbol,
+    String? firstPlayer,
+    Player? firstMove,
   }) {
     return TicTacToeState(
       board: board ?? this.board,
@@ -37,6 +46,9 @@ class TicTacToeState {
       gameOver: gameOver ?? this.gameOver,
       isAI: isAI ?? this.isAI,
       difficulty: difficulty ?? this.difficulty,
+      userSymbol: userSymbol ?? this.userSymbol,
+      firstPlayer: firstPlayer ?? this.firstPlayer,
+      firstMove: firstMove ?? this.firstMove,
     );
   }
 }
