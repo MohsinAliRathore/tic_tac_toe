@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../Theme/app_colors.dart';
+
 class LinePainter extends StatelessWidget {
   final List<int> winningCombo;
 
@@ -22,8 +24,8 @@ class _WinningLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.red
-      ..strokeWidth = 5
+      ..color = AppColors.yellowColor
+      ..strokeWidth = 3
       ..style = PaintingStyle.stroke;
 
     double cellSize = size.width / 3;
