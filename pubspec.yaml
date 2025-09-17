@@ -39,6 +39,7 @@ dependencies:
   shared_preferences: any
   flutter_svg: ^2.2.0
   google_fonts: ^6.3.1
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -92,3 +93,11 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app-icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#FFFFFFFF" # Use 8-digit hex for full opacity
+  adaptive_icon_foreground: "assets/images/app-icon.png"
+  remove_alpha_ios: true
