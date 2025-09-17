@@ -6,6 +6,8 @@ class AppImages {
   static const String appLogo = '${imageBasePath}logo.svg';
   static const String oIcon = '${imageBasePath}O.svg';
   static const String xIcon = '${imageBasePath}X.svg';
+  static const String xButton = '${imageBasePath}x-button.svg';
+  static const String oButton = '${imageBasePath}o-button.svg';
   static const String backIcon = '${imageBasePath}back-icon.svg';
   static const String background = '${imageBasePath}background.svg';
   static const String botIcon = '${imageBasePath}bot-icon.svg';

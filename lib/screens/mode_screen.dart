@@ -20,218 +20,170 @@ class ModeSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Select Mode')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () async {
-                final difficulty = await SettingsManager.getDifficulty();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => TicTacToeBloc(),
-                      child: SymbolSelection(difficulty: difficulty),
+      //appBar: AppBar(title: const Text('Select Mode')),
+      body: Stack(
+        children: [
+          SvgPicture.asset(
+            AppImages.background,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          CustomAppBar(),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  final difficulty = await SettingsManager.getDifficulty();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                        create: (context) => TicTacToeBloc(),
+                        child: SymbolSelection(difficulty: difficulty),
+                      ),
                     ),
+                  );
+                },
+                child: Container(
+                  height: 57,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  margin: EdgeInsetsGeometry.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
                   ),
-                );
-              },
-              child: const Text('Play with AI'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider(
-                      create: (context) => TicTacToeBloc(),
-                      child: const MultiplayerMoveOrderSelection(),
+                  decoration: BoxDecoration(
+                    gradient: AppColors
+                        .buttonYellowGradientColor, // Apply gradient from AppColors
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(30),
+                    ), // Stadium-like shape
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26, // Shadow color
+                        blurRadius: 8, // Shadow blur
+                        offset: Offset(0, 4), // Shadow offset
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 35,
+                        width: 40,
+                        alignment: Alignment.center,
+                        child: SvgPicture.asset(
+                          AppImages.userIcon,
+                          fit: BoxFit.cover,
+                          width: 32,
+                          height: 32,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        'VS',
+                        style: GoogleFonts.pridi(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.primaryBlueColor,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      SizedBox(
+                        height: 29,
+                        width: 40,
+                        child: SvgPicture.asset(
+                          AppImages.botIcon,
+                          fit: BoxFit.cover,
+                          width: 32,
+                          height: 32,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                        create: (context) => TicTacToeBloc(),
+                        child: const MultiplayerMoveOrderSelection(),
+                      ),
                     ),
+                  );
+                },
+                child: Container(
+                  height: 57,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  margin: EdgeInsetsGeometry.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
                   ),
-                );
-              },
-              child: const Text('Multiplayer'),
-            ),
-          ],
-        ),
+                  decoration: BoxDecoration(
+                    gradient: AppColors
+                        .buttonYellowGradientColor, // Apply gradient from AppColors
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(30),
+                    ), // Stadium-like shape
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26, // Shadow color
+                        blurRadius: 8, // Shadow blur
+                        offset: Offset(0, 4), // Shadow offset
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 35,
+                        width: 40,
+                        alignment: Alignment.center,
+                        child: SvgPicture.asset(
+                          AppImages.userIcon,
+                          fit: BoxFit.cover,
+                          width: 32,
+                          height: 32,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        'VS',
+                        style: GoogleFonts.pridi(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.primaryBlueColor,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Container(
+                        height: 35,
+                        width: 40,
+                        alignment: Alignment.center,
+                        child: SvgPicture.asset(
+                          AppImages.userIcon,
+                          fit: BoxFit.cover,
+                          width: 32,
+                          height: 32,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 }
-
-
-
-
-
-
-
-// class ModeSelection extends StatelessWidget {
-//   const ModeSelection({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Stack(
-//         children: [
-//           SvgPicture.asset(
-//             AppImages.background,
-//             fit: BoxFit.cover,
-//             width: double.infinity,
-//             height: double.infinity,
-//           ),
-//           CustomAppBar(),
-//           Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               GestureDetector(
-//                 onTap: () async {
-//                   final difficulty = await SettingsManager.getDifficulty();
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                       builder: (context) => BlocProvider(
-//                         create: (context) => TicTacToeBloc(),
-//                         child: GameScreen(
-//                           isAI: true,
-//                           difficulty: difficulty,
-//                         ),
-//                       ),
-//                     ),
-//                   );
-//                 },
-//                 child: Container(
-//                   height: 57,
-//                   width: double.infinity,
-//                   alignment: Alignment.center,
-//                   margin: EdgeInsetsGeometry.symmetric(
-//                     horizontal: 16,
-//                     vertical: 12,
-//                   ),
-//                   decoration: BoxDecoration(
-//                     gradient: AppColors
-//                         .buttonYellowGradientColor, // Apply gradient from AppColors
-//                     borderRadius: const BorderRadius.all(
-//                       Radius.circular(30),
-//                     ), // Stadium-like shape
-//                     boxShadow: const [
-//                       BoxShadow(
-//                         color: Colors.black26, // Shadow color
-//                         blurRadius: 8, // Shadow blur
-//                         offset: Offset(0, 4), // Shadow offset
-//                       ),
-//                     ],
-//                   ),
-//                   child: Row(
-//                     mainAxisSize: MainAxisSize.min,
-//                     children: [
-//                       Container(
-//                         height: 35,
-//                         width: 40,
-//                         alignment: Alignment.center,
-//                         child: SvgPicture.asset(
-//                           AppImages.userIcon,
-//                           fit: BoxFit.cover,
-//                           width: 32,
-//                           height: 32,
-//                         ),
-//                       ),
-//                       SizedBox(width: 8),
-//                       Text('VS',
-//                         style: GoogleFonts.pridi(
-//                             fontSize: 24,
-//                             fontWeight: FontWeight.w500,
-//                             color: AppColors.primaryBlueColor
-//                         ),
-//                       ),
-//                       SizedBox(width: 8),
-//                       SizedBox(
-//                         height: 29,
-//                         width: 40,
-//                         child: SvgPicture.asset(
-//                           AppImages.botIcon,
-//                           fit: BoxFit.cover,
-//                           width: 32,
-//                           height: 32,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//               GestureDetector(
-//                 onTap: () {
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(builder: (context) => const FirstMoveSelection(isAI: false)),
-//                   );
-//                 },
-//                 child: Container(
-//                   height: 57,
-//                   width: double.infinity,
-//                   alignment: Alignment.center,
-//                   margin: EdgeInsetsGeometry.symmetric(
-//                     horizontal: 16,
-//                     vertical: 12,
-//                   ),
-//                   decoration: BoxDecoration(
-//                     gradient: AppColors
-//                         .buttonYellowGradientColor, // Apply gradient from AppColors
-//                     borderRadius: const BorderRadius.all(
-//                       Radius.circular(30),
-//                     ), // Stadium-like shape
-//                     boxShadow: const [
-//                       BoxShadow(
-//                         color: Colors.black26, // Shadow color
-//                         blurRadius: 8, // Shadow blur
-//                         offset: Offset(0, 4), // Shadow offset
-//                       ),
-//                     ],
-//                   ),
-//                   child: Row(
-//                     mainAxisSize: MainAxisSize.min,
-//                     children: [
-//                       Container(
-//                         height: 35,
-//                         width: 40,
-//                         alignment: Alignment.center,
-//                         child: SvgPicture.asset(
-//                           AppImages.userIcon,
-//                           fit: BoxFit.cover,
-//                           width: 32,
-//                           height: 32,
-//                         ),
-//                       ),
-//                       SizedBox(width: 8),
-//                       Text('VS',
-//                         style: GoogleFonts.pridi(
-//                             fontSize: 24,
-//                             fontWeight: FontWeight.w500,
-//                             color: AppColors.primaryBlueColor
-//                         ),
-//                       ),
-//                       SizedBox(width: 8),
-//                       Container(
-//                         height: 35,
-//                         width: 40,
-//                         alignment: Alignment.center,
-//                         child: SvgPicture.asset(
-//                           AppImages.userIcon,
-//                           fit: BoxFit.cover,
-//                           width: 32,
-//                           height: 32,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ],
-//       )
-//     );
-//   }
-// }
-
