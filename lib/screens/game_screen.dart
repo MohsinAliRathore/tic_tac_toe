@@ -13,8 +13,6 @@ import '../widgets/line_painter.dart';
 import '../widgets/player_widget.dart';
 import 'menu_screen.dart';
 
-
-
 class GameScreen extends StatefulWidget {
   final bool isAI;
   final Difficulty? difficulty;
@@ -41,13 +39,15 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TicTacToeBloc>().add(StartGameEvent(
-        isAI: widget.isAI,
-        difficulty: widget.difficulty,
-        firstMove: widget.firstMove,
-        userSymbol: widget.userSymbol,
-        firstPlayer: widget.firstPlayer,
-      ));
+      context.read<TicTacToeBloc>().add(
+        StartGameEvent(
+          isAI: widget.isAI,
+          difficulty: widget.difficulty,
+          firstMove: widget.firstMove,
+          userSymbol: widget.userSymbol,
+          firstPlayer: widget.firstPlayer,
+        ),
+      );
     });
 
     return Scaffold(
@@ -71,10 +71,15 @@ class _GameScreenState extends State<GameScreen> {
         builder: (context, state) {
           String turnMessage;
           if (state.isAI) {
-            turnMessage = state.currentPlayer == state.userSymbol ? 'Your Turn' : 'AI\'s Turn';
+            turnMessage = state.currentPlayer == state.userSymbol
+                ? 'Your Turn'
+                : 'AI\'s Turn';
           } else {
-            turnMessage = state.firstPlayer == 'Player 1' && state.currentPlayer == state.firstMove ||
-                state.firstPlayer == 'Player 2' && state.currentPlayer != state.firstMove
+            turnMessage =
+                state.firstPlayer == 'Player 1' &&
+                        state.currentPlayer == state.firstMove ||
+                    state.firstPlayer == 'Player 2' &&
+                        state.currentPlayer != state.firstMove
                 ? 'Player 1\'s Turn'
                 : 'Player 2\'s Turn';
           }
@@ -85,10 +90,15 @@ class _GameScreenState extends State<GameScreen> {
               String winMessage;
               if (state.winner != Player.none) {
                 if (state.isAI) {
-                  winMessage = state.winner == state.userSymbol ? 'User Wins!' : 'AI Wins!';
+                  winMessage = state.winner == state.userSymbol
+                      ? 'User Wins!'
+                      : 'AI Wins!';
                 } else {
-                  winMessage = state.firstPlayer == 'Player 1' && state.winner == state.firstMove ||
-                      state.firstPlayer == 'Player 2' && state.winner != state.firstMove
+                  winMessage =
+                      state.firstPlayer == 'Player 1' &&
+                              state.winner == state.firstMove ||
+                          state.firstPlayer == 'Player 2' &&
+                              state.winner != state.firstMove
                       ? 'Player 1 Wins!'
                       : 'Player 2 Wins!';
                 }
@@ -99,10 +109,8 @@ class _GameScreenState extends State<GameScreen> {
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder: (dialogContext) =>
-
-                    AlertDialog(
-                      backgroundColor: Colors.white,
+                builder: (dialogContext) => AlertDialog(
+                  backgroundColor: Colors.white,
                   content: Container(
                     height: 400,
                     width: 400,
@@ -134,12 +142,14 @@ class _GameScreenState extends State<GameScreen> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             GameStats.clear();
                             Navigator.pushAndRemoveUntil(
                               dialogContext,
-                              MaterialPageRoute(builder: (context) => const MainMenu()),
-                                  (route) => false,
+                              MaterialPageRoute(
+                                builder: (context) => const MainMenu(),
+                              ),
+                              (route) => false,
                             );
                           },
                           child: Container(
@@ -191,8 +201,10 @@ class _GameScreenState extends State<GameScreen> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: (){
-                            context.read<TicTacToeBloc>().add(ResetBoardEvent());
+                          onTap: () {
+                            context.read<TicTacToeBloc>().add(
+                              ResetBoardEvent(),
+                            );
                             setState(() {
                               _dialogShown = false;
                             });
@@ -261,7 +273,7 @@ class _GameScreenState extends State<GameScreen> {
                 width: double.infinity,
                 height: double.infinity,
               ),
-              CustomAppBar(),
+              CustomAppBar(isGameScreen: true),
               SizedBox(
                 width: double.infinity,
                 child: Column(
@@ -296,30 +308,40 @@ class _GameScreenState extends State<GameScreen> {
                         children: [
                           GridView.builder(
                             physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 8,
-                              crossAxisSpacing: 8,
-                            ),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  mainAxisSpacing: 8,
+                                  crossAxisSpacing: 8,
+                                ),
                             padding: const EdgeInsets.all(12),
                             itemCount: 9,
                             itemBuilder: (context, index) {
                               int row = index ~/ 3;
                               int col = index % 3;
-                              bool isTapped = state.board[row][col] != Player.none;
+                              bool isTapped =
+                                  state.board[row][col] != Player.none;
                               return GestureDetector(
                                 onTap: () {
-                                  if (state.isAI && state.currentPlayer != state.userSymbol) return;
-                                  context.read<TicTacToeBloc>().add(MakeMoveEvent(row, col));
+                                  if (state.isAI &&
+                                      state.currentPlayer != state.userSymbol)
+                                    return;
+                                  context.read<TicTacToeBloc>().add(
+                                    MakeMoveEvent(row, col),
+                                  );
                                 },
                                 child: AnimatedContainer(
                                   duration: const Duration(milliseconds: 200),
                                   curve: Curves.easeInOut,
-                                  transform: Matrix4.identity()..scale(isTapped ? 0.95 : 1.0),
+                                  transform: Matrix4.identity()
+                                    ..scale(isTapped ? 0.95 : 1.0),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(15),
-                                    border: Border.all(color: AppColors.primaryBlueColor, width: 2),
+                                    border: Border.all(
+                                      color: AppColors.primaryBlueColor,
+                                      width: 2,
+                                    ),
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black.withOpacity(0.1),
@@ -342,7 +364,6 @@ class _GameScreenState extends State<GameScreen> {
                         ],
                       ),
                     ),
-
                   ],
                 ),
               ),

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../Constants/app_images.dart';
 import '../Theme/app_colors.dart';
+import '../models/game_stats_model.dart';
+import '../screens/menu_screen.dart';
 import '../screens/setting_screen.dart';
 
 class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({
-    super.key,
-  });
+  final bool isGameScreen;
+  const CustomAppBar({super.key, this.isGameScreen = false});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +20,16 @@ class CustomAppBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             GestureDetector(
-              onTap: (){
-                Navigator.pop(context);
+              onTap: () {
+                if (isGameScreen) {
+                  GameStats.clear();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MainMenu()),
+                  );
+                } else {
+                  Navigator.pop(context);
+                }
               },
               child: Container(
                 height: 48,
@@ -28,13 +37,8 @@ class CustomAppBar extends StatelessWidget {
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: AppColors.primaryBlueColor,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 2.0,
-                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  border: Border.all(color: Colors.white, width: 2.0),
                   boxShadow: const [
                     BoxShadow(
                       color: Colors.black26, // Shadow color
@@ -54,7 +58,7 @@ class CustomAppBar extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -68,13 +72,8 @@ class CustomAppBar extends StatelessWidget {
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: AppColors.primaryBlueColor,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 2.0,
-                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  border: Border.all(color: Colors.white, width: 2.0),
                   boxShadow: const [
                     BoxShadow(
                       color: Colors.black26, // Shadow color
@@ -93,7 +92,7 @@ class CustomAppBar extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
